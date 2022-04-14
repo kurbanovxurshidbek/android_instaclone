@@ -3,6 +3,7 @@ package com.example.android_instademo.fragment
 import android.app.Activity
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.example.android_firebase_demo.managers.*
 import com.example.android_instademo.R
 import com.example.android_instademo.adapter.ProfileAdapter
+import com.example.android_instademo.manager.handler.DBPostsHandler
 import com.example.android_instademo.manager.handler.DBUserHandler
 import com.example.android_instademo.manager.handler.StorageHandler
 import com.example.android_instademo.model.Post
@@ -29,6 +31,7 @@ class ProfileFragment : BaseFragment() {
     lateinit var rv_profile: RecyclerView
     lateinit var tv_fullname: TextView
     lateinit var tv_email: TextView
+    lateinit var tv_posts: TextView
     lateinit var iv_profile: ShapeableImageView
 
     var pickedPhoto: Uri? = null
@@ -49,6 +52,7 @@ class ProfileFragment : BaseFragment() {
         rv_profile.setLayoutManager(GridLayoutManager(activity, 2))
         tv_fullname = view.findViewById(R.id.tv_fullname)
         tv_email = view.findViewById(R.id.tv_email)
+        tv_posts = view.findViewById(R.id.tv_posts)
         iv_profile = view.findViewById(R.id.iv_profile)
 
         val iv_logout = view.findViewById<ImageView>(R.id.iv_logout)
@@ -59,13 +63,27 @@ class ProfileFragment : BaseFragment() {
         iv_profile.setOnClickListener {
             pickFishBunPhoto()
         }
-        refreshAdapter(loadPosts())
 
         loadUserInfo()
+        loadMyPosts()
+    }
+
+    private fun loadMyPosts(){
+        val uid = AuthManager.currentUser()!!.uid
+        DatabaseManager.loadPosts(uid, object: DBPostsHandler{
+            override fun onSuccess(posts: ArrayList<Post>) {
+                tv_posts.text = posts.size.toString()
+                refreshAdapter(posts)
+            }
+
+            override fun onError(e: Exception) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
     private fun loadUserInfo() {
-        DatabaseManager.loadUser(AuthManager.currentUser().uid, object : DBUserHandler {
+        DatabaseManager.loadUser(AuthManager.currentUser()!!.uid, object : DBUserHandler {
             override fun onSuccess(user: User?) {
                 if (user != null) {
                     showUserInfo(user)
@@ -95,7 +113,8 @@ class ProfileFragment : BaseFragment() {
     private fun showUserInfo(user: User){
         tv_fullname.text = user.fullname
         tv_email.text = user.email
-        Glide.with(this).load(user.image)
+        Log.d("@@@userImg ",user.userImg)
+        Glide.with(this).load(user.userImg)
             .placeholder(R.drawable.ic_person)
             .error(R.drawable.ic_person)
             .into(iv_profile)

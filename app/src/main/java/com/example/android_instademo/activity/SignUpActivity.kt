@@ -40,8 +40,10 @@ class SignUpActivity : BaseActivity() {
             val fullname = et_fullname.text.toString().trim()
             val email = et_email.text.toString().trim()
             val password = et_password.text.toString().trim()
-            val user = User(fullname, email, password,"")
-            firebaseSignUp(user)
+            if(fullname.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()){
+                val user = User(fullname, email, password,"")
+                firebaseSignUp(user)
+            }
         }
         val tv_signin = findViewById<TextView>(R.id.tv_signin)
         tv_signin.setOnClickListener { finish() }

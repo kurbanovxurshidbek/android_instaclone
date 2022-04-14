@@ -11,14 +11,14 @@ object AuthManager {
         return currentUser() != null
     }
 
-    fun currentUser(): FirebaseUser{
-        return firebaseAuth.currentUser!!
+    fun currentUser(): FirebaseUser?{
+        return firebaseAuth.currentUser
     }
 
     fun signIn(email: String, password: String, handler: AuthHandler) {
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val uid = currentUser().uid
+                val uid = currentUser()!!.uid
                 handler.onSuccess(uid)
             } else {
                 handler.onError(task.exception)
@@ -29,7 +29,7 @@ object AuthManager {
     fun signUp(email: String, password: String, handler: AuthHandler) {
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val uid = currentUser().uid
+                val uid = currentUser()!!.uid
                 handler.onSuccess(uid)
             } else {
                 handler.onError(task.exception)

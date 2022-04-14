@@ -19,8 +19,7 @@ class HomeAdapter(var fragment: HomeFragment, var items: ArrayList<Post>): BaseA
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_post_home, parent, false)
+        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.item_post_home, parent, false)
         return PostViewHolder(view)
     }
 
@@ -28,8 +27,18 @@ class HomeAdapter(var fragment: HomeFragment, var items: ArrayList<Post>): BaseA
         val post: Post = items[position]
         if (holder is PostViewHolder) {
             var iv_post = holder.iv_post
+            val tv_fullname = holder.tv_fullname
+            val iv_profile = holder.iv_profile
+            val tv_caption = holder.tv_caption
 
-            Glide.with(fragment).load(post.image).into(iv_post)
+            tv_fullname.text = post.fullname
+            tv_caption.text = post.caption
+            Glide.with(fragment)
+                .load(post.userImg)
+                .placeholder(R.drawable.ic_person)
+                .error(R.drawable.ic_person)
+                .into(iv_profile)
+            Glide.with(fragment).load(post.postImg).into(iv_post)
         }
     }
 

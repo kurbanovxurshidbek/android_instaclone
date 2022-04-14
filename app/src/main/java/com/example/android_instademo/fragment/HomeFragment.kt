@@ -8,9 +8,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android_firebase_demo.managers.AuthManager
+import com.example.android_firebase_demo.managers.DatabaseManager
 import com.example.android_instademo.R
 import com.example.android_instademo.adapter.HomeAdapter
+import com.example.android_instademo.manager.handler.DBPostsHandler
 import com.example.android_instademo.model.Post
+import java.lang.Exception
 
 class HomeFragment : BaseFragment() {
     val TAG = HomeFragment::class.java.simpleName
@@ -52,7 +56,7 @@ class HomeFragment : BaseFragment() {
             listener!!.scrollToUpload()
         }
 
-        refreshAdapter(loadPosts())
+        loadMyFeeds()
     }
 
     private fun refreshAdapter(items: ArrayList<Post>) {
@@ -60,12 +64,19 @@ class HomeFragment : BaseFragment() {
         recyclerView.adapter = adapter
     }
 
-    private fun loadPosts():ArrayList<Post>{
-        val items = ArrayList<Post>()
-        items.add(Post("Here we go","https://images.unsplash.com/photo-1557053815-9f79f70c7980?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1052&q=80"))
-        items.add(Post("Here we go","https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80"))
-        items.add(Post("Here we go","https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"))
-        return items
+    private fun loadMyFeeds(){
+        showLoading(requireActivity())
+        val uid = AuthManager.currentUser()!!.uid
+        DatabaseManager.loadFeeds(uid, object: DBPostsHandler {
+            override fun onSuccess(posts: ArrayList<Post>) {
+                dismissLoading()
+                refreshAdapter(posts)
+            }
+
+            override fun onError(e: Exception) {
+                dismissLoading()
+            }
+        })
     }
 
     /**

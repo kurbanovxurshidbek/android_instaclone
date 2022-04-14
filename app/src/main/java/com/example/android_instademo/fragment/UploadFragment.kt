@@ -11,12 +11,24 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
+import com.example.android_firebase_demo.managers.AuthManager
+import com.example.android_firebase_demo.managers.DatabaseManager
+import com.example.android_firebase_demo.managers.StorageManager
 import com.example.android_instademo.R
+import com.example.android_instademo.manager.handler.DBPostHandler
+import com.example.android_instademo.manager.handler.DBUserHandler
+import com.example.android_instademo.manager.handler.StorageHandler
 import com.example.android_instademo.model.Post
+import com.example.android_instademo.model.User
+import com.example.android_instademo.utils.Extensions.getCurrentDateTime
 import com.example.android_instademo.utils.Logger
 import com.example.android_instademo.utils.Utils
 import com.sangcomz.fishbun.FishBun
 import com.sangcomz.fishbun.adapter.image.impl.GlideAdapter
+import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * In UploadFragment, user can upload
@@ -33,7 +45,11 @@ class UploadFragment : BaseFragment() {
     var pickedPhoto: Uri? = null
     var allPhotos = ArrayList<Uri>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_upload, container, false)
         initViews(view)
         return view
@@ -112,13 +128,62 @@ class UploadFragment : BaseFragment() {
         }
 
     private fun uploadNewPost() {
-        listener!!.scrollToHome()
         val caption = et_caption.text.toString().trim()
         if (caption.isNotEmpty() && pickedPhoto != null) {
-            Logger.d(TAG, caption)
-            Logger.d(TAG, pickedPhoto!!.path.toString())
-            resetAll()
+            uploadPostPhoto(caption, pickedPhoto!!)
         }
+    }
+
+    private fun uploadPostPhoto(caption: String, uri: Uri) {
+        showLoading(requireActivity())
+        StorageManager.uploadPostPhoto(uri, object : StorageHandler {
+            override fun onSuccess(imgUrl: String) {
+                val post = Post(caption, imgUrl)
+                val uid = AuthManager.currentUser()!!.uid
+
+                DatabaseManager.loadUser(uid, object : DBUserHandler{
+                    override fun onSuccess(user: User?) {
+                        post.uid = uid
+                        post.fullname = user!!.fullname
+                        post.userImg = user.userImg
+                        storePostToDB(post)
+                    }
+
+                    override fun onError(e: Exception) {
+                    }
+                })
+            }
+
+            override fun onError(exception: Exception?) {
+
+            }
+        })
+    }
+
+    private fun storePostToDB(post: Post) {
+        DatabaseManager.storePosts(post, object : DBPostHandler{
+            override fun onSuccess() {
+                storeFeedToDB(post)
+            }
+
+            override fun onError(e: Exception) {
+                dismissLoading()
+            }
+        })
+    }
+
+    private fun storeFeedToDB(post: Post) {
+        DatabaseManager.storeFeeds(post, object : DBPostHandler{
+            override fun onSuccess() {
+                dismissLoading()
+                resetAll()
+                listener!!.scrollToHome()
+            }
+
+            override fun onError(e: Exception) {
+                dismissLoading()
+            }
+        })
     }
 
     private fun showPickedPhoto() {
@@ -132,15 +197,12 @@ class UploadFragment : BaseFragment() {
     }
 
     private fun resetAll() {
+        allPhotos.clear()
         et_caption.text.clear()
         pickedPhoto = null
         fl_photo.visibility = View.GONE
     }
 
-    private fun apiUploadPost(){
-        val post = Post("Here we go","")
-
-    }
 
     /**
      * This interface is created for communication with HomeFragment
