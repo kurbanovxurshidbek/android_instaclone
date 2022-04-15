@@ -113,7 +113,6 @@ class ProfileFragment : BaseFragment() {
     private fun showUserInfo(user: User){
         tv_fullname.text = user.fullname
         tv_email.text = user.email
-        Log.d("@@@userImg ",user.userImg)
         Glide.with(this).load(user.userImg)
             .placeholder(R.drawable.ic_person)
             .error(R.drawable.ic_person)

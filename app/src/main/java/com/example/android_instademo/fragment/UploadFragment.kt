@@ -20,7 +20,6 @@ import com.example.android_instademo.manager.handler.DBUserHandler
 import com.example.android_instademo.manager.handler.StorageHandler
 import com.example.android_instademo.model.Post
 import com.example.android_instademo.model.User
-import com.example.android_instademo.utils.Extensions.getCurrentDateTime
 import com.example.android_instademo.utils.Logger
 import com.example.android_instademo.utils.Utils
 import com.sangcomz.fishbun.FishBun
@@ -162,7 +161,7 @@ class UploadFragment : BaseFragment() {
 
     private fun storePostToDB(post: Post) {
         DatabaseManager.storePosts(post, object : DBPostHandler{
-            override fun onSuccess() {
+            override fun onSuccess(post: Post) {
                 storeFeedToDB(post)
             }
 
@@ -174,7 +173,7 @@ class UploadFragment : BaseFragment() {
 
     private fun storeFeedToDB(post: Post) {
         DatabaseManager.storeFeeds(post, object : DBPostHandler{
-            override fun onSuccess() {
+            override fun onSuccess(post: Post) {
                 dismissLoading()
                 resetAll()
                 listener!!.scrollToHome()

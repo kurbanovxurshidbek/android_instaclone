@@ -5,6 +5,9 @@ import com.example.android_instademo.manager.handler.StorageHandler
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 
+private var USER_PHOTO_PATH = "users"
+private var POST_PHOTO_PATH = "posts"
+
 object StorageManager {
     private val storage = FirebaseStorage.getInstance()
     private var storageRef = storage.getReference()
@@ -40,7 +43,4 @@ object StorageManager {
             handler.onError(e)
         }
     }
-
-    private var USER_PHOTO_PATH = "users"
-    private var POST_PHOTO_PATH = "posts"
 }
