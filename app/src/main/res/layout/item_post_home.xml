@@ -35,7 +35,7 @@
                 android:id="@+id/tv_fullname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="khurshid88"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -44,7 +44,7 @@
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="February 2, 2021"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -99,7 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="Glide is a fast and efficient open source media management and image loading framework"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="16sp" />
     </LinearLayout>

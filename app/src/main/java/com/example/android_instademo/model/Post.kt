@@ -7,7 +7,7 @@ class Post {
     var id: String = ""
     var caption: String = ""
     var postImg: String = ""
-    var currentDate: String = currentTime()
+    var currentDate: String = ""
 
     var uid: String = ""
     var fullname: String = ""
@@ -24,8 +24,8 @@ class Post {
         this.postImg = postImg
     }
 
-    private fun currentTime(): String {
+    fun setCurrentTime() {
         val sdf = SimpleDateFormat("dd/M/yyyy hh:mm")
-        return sdf.format(Date())
+        currentDate = sdf.format(Date())
     }
 }
