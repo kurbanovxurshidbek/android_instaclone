@@ -80,6 +80,16 @@ object DatabaseManager {
         }
     }
 
+    fun storeFeeds(post: Post, handler: DBPostHandler) {
+        val reference = database.collection(USER_PATH).document(post.uid).collection(FEED_PATH)
+
+        reference.document(post.id).set(post).addOnSuccessListener {
+            handler.onSuccess(post)
+        }.addOnFailureListener {
+            handler.onError(it)
+        }
+    }
+
     fun loadPosts(uid:String, handler: DBPostsHandler) {
         val reference = database.collection(USER_PATH).document(uid).collection(POST_PATH)
         reference.get().addOnCompleteListener {
@@ -91,11 +101,13 @@ object DatabaseManager {
                     val postImg = document.getString("postImg")
                     val fullname = document.getString("fullname")
                     val userImg = document.getString("userImg")
+                    val currentDate = document.getString("currentDate")
 
                     val post = Post(id!!, caption!!, postImg!!)
                     post.uid = uid
                     post.fullname = fullname!!
                     post.userImg = userImg!!
+                    post.currentDate = currentDate!!
                     posts.add(post)
                 }
                 handler.onSuccess(posts)
@@ -105,18 +117,8 @@ object DatabaseManager {
         }
     }
 
-    fun storeFeeds(post: Post, handler: DBPostHandler) {
-        val reference = database.collection(USER_PATH).document(post.uid).collection(FEED_PATH)
-
-        reference.document(post.id).set(post).addOnSuccessListener {
-            handler.onSuccess(post)
-        }.addOnFailureListener {
-            handler.onError(it)
-        }
-    }
-
     fun loadFeeds(uid:String, handler: DBPostsHandler) {
-        val reference = database.collection(USER_PATH).document(uid).collection(FEED_PATH)
+        val reference = database.collection(USER_PATH).document(uid).collection(FEED_PATH).orderBy("currentDate")
         reference.get().addOnCompleteListener {
             val posts = ArrayList<Post>()
             if (it.isSuccessful) {
@@ -126,11 +128,13 @@ object DatabaseManager {
                     val postImg = document.getString("postImg")
                     val fullname = document.getString("fullname")
                     val userImg = document.getString("userImg")
+                    val currentDate = document.getString("currentDate")
 
                     val post = Post(id!!, caption!!, postImg!!)
                     post.uid = uid
                     post.fullname = fullname!!
                     post.userImg = userImg!!
+                    post.currentDate = currentDate!!
                     posts.add(post)
                 }
                 handler.onSuccess(posts)
