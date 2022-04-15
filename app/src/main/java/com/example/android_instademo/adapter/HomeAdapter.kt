@@ -30,9 +30,11 @@ class HomeAdapter(var fragment: HomeFragment, var items: ArrayList<Post>): BaseA
             val tv_fullname = holder.tv_fullname
             val iv_profile = holder.iv_profile
             val tv_caption = holder.tv_caption
+            val tv_time = holder.tv_time
 
             tv_fullname.text = post.fullname
             tv_caption.text = post.caption
+            tv_time.text = post.currentDate
             Glide.with(fragment)
                 .load(post.userImg)
                 .placeholder(R.drawable.ic_person)
