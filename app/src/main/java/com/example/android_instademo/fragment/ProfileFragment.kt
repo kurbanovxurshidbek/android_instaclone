@@ -81,9 +81,7 @@ class ProfileFragment : BaseFragment() {
             override fun onSuccess(users: ArrayList<User>) {
                 tv_following.text = users.size.toString()
             }
-
             override fun onError(e: Exception) {
-
             }
         })
     }
@@ -94,9 +92,7 @@ class ProfileFragment : BaseFragment() {
             override fun onSuccess(users: ArrayList<User>) {
                 tv_followers.text = users.size.toString()
             }
-
             override fun onError(e: Exception) {
-
             }
         })
     }

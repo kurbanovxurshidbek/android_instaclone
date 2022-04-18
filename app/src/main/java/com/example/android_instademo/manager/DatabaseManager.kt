@@ -58,8 +58,7 @@ object DatabaseManager {
         database.collection(USER_PATH).document(me.uid).collection(FOLLOWING_PATH).document(to.uid)
             .set(to).addOnSuccessListener {
                 // User(Me) is in his/her followers
-                database.collection(USER_PATH).document(to.uid).collection(FOLLOWERS_PATH)
-                    .document(me.uid)
+                database.collection(USER_PATH).document(to.uid).collection(FOLLOWERS_PATH).document(me.uid)
                     .set(me).addOnSuccessListener {
                         handler.onSuccess(true)
                     }.addOnFailureListener {
@@ -75,8 +74,7 @@ object DatabaseManager {
         database.collection(USER_PATH).document(me.uid).collection(FOLLOWING_PATH).document(to.uid)
             .delete().addOnSuccessListener {
                 // User(Me) is in his/her followers
-                database.collection(USER_PATH).document(to.uid).collection(FOLLOWERS_PATH)
-                    .document(me.uid)
+                database.collection(USER_PATH).document(to.uid).collection(FOLLOWERS_PATH).document(me.uid)
                     .delete().addOnSuccessListener {
                         handler.onSuccess(true)
                     }.addOnFailureListener {

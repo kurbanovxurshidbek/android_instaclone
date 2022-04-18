@@ -4,6 +4,6 @@ import com.example.android_instademo.model.Post
 import java.lang.Exception
 
 interface DBFollowHandler {
-    fun onSuccess(isFollowed: Boolean)
+    fun onSuccess(isDone: Boolean)
     fun onError(e: Exception)
 }

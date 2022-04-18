@@ -126,7 +126,7 @@ class SearchFragment : BaseFragment() {
                 DatabaseManager.followUser(me!!, to, object : DBFollowHandler {
                     override fun onSuccess(isFollowed: Boolean) {
                         to.isFollowed = true
-                        //DatabaseManager.storePostsToMyFeed(uid, to)
+                        DatabaseManager.storePostsToMyFeed(uid, to)
                     }
 
                     override fun onError(e: Exception) {
@@ -145,7 +145,7 @@ class SearchFragment : BaseFragment() {
                 DatabaseManager.unFollowUser(me!!, to, object : DBFollowHandler {
                     override fun onSuccess(isFollowed: Boolean) {
                         to.isFollowed = false
-                        //DatabaseManager.removePostsFromMyFeed(uid, to)
+                        DatabaseManager.removePostsFromMyFeed(uid, to)
                     }
 
                     override fun onError(e: Exception) {
