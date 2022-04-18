@@ -1,12 +1,10 @@
 package com.example.android_firebase_demo.managers
 
-import com.example.android_instademo.manager.handler.DBPostHandler
-import com.example.android_instademo.manager.handler.DBPostsHandler
-import com.example.android_instademo.manager.handler.DBUserHandler
-import com.example.android_instademo.manager.handler.DBUsersHandler
+import com.example.android_instademo.manager.handler.*
 import com.example.android_instademo.model.Post
 import com.example.android_instademo.model.User
 import com.google.firebase.firestore.FirebaseFirestore
+import java.lang.Exception
 
 private var USER_PATH = "users"
 private var POST_PATH = "posts"
@@ -16,6 +14,118 @@ private var FOLLOWERS_PATH = "followers"
 
 object DatabaseManager {
     private var database = FirebaseFirestore.getInstance()
+
+    fun storePostsToMyFeed(uid: String, to:User){
+        loadPosts(to.uid, object :DBPostsHandler{
+            override fun onSuccess(posts: ArrayList<Post>) {
+                for (post in posts){
+                    storeFeed(uid, post)
+                }
+            }
+
+            override fun onError(e: Exception) {
+
+            }
+        })
+    }
+
+    fun storeFeed(uid:String, post: Post){
+        val reference = database.collection(USER_PATH).document(uid).collection(FEED_PATH)
+        reference.document(post.id).set(post)
+    }
+
+    fun removePostsFromMyFeed(uid: String, to:User){
+        loadPosts(to.uid, object :DBPostsHandler{
+            override fun onSuccess(posts: ArrayList<Post>) {
+                for (post in posts){
+                    removeFeed(uid, post)
+                }
+            }
+
+            override fun onError(e: Exception) {
+
+            }
+        })
+    }
+
+    fun removeFeed(uid:String, post: Post){
+        val reference = database.collection(USER_PATH).document(uid).collection(FEED_PATH)
+        reference.document(post.id).delete()
+    }
+
+    fun followUser(me: User, to: User, handler: DBFollowHandler) {
+        // User(To) is in my following
+        database.collection(USER_PATH).document(me.uid).collection(FOLLOWING_PATH).document(to.uid)
+            .set(to).addOnSuccessListener {
+                // User(Me) is in his/her followers
+                database.collection(USER_PATH).document(to.uid).collection(FOLLOWERS_PATH)
+                    .document(me.uid)
+                    .set(me).addOnSuccessListener {
+                        handler.onSuccess(true)
+                    }.addOnFailureListener {
+                        handler.onError(it)
+                    }
+            }.addOnFailureListener {
+                handler.onError(it)
+            }
+    }
+
+    fun unFollowUser(me: User, to: User, handler: DBFollowHandler) {
+        // User(To) is in my following
+        database.collection(USER_PATH).document(me.uid).collection(FOLLOWING_PATH).document(to.uid)
+            .delete().addOnSuccessListener {
+                // User(Me) is in his/her followers
+                database.collection(USER_PATH).document(to.uid).collection(FOLLOWERS_PATH)
+                    .document(me.uid)
+                    .delete().addOnSuccessListener {
+                        handler.onSuccess(true)
+                    }.addOnFailureListener {
+                        handler.onError(it)
+                    }
+            }.addOnFailureListener {
+                handler.onError(it)
+            }
+    }
+
+    fun loadFollowing(uid:String,handler: DBUsersHandler) {
+        database.collection(USER_PATH).document(uid).collection(FOLLOWING_PATH).get().addOnCompleteListener {
+            val users = ArrayList<User>()
+            if (it.isSuccessful) {
+                for (document in it.result!!) {
+                    val uid = document.getString("uid")
+                    val fullname = document.getString("fullname")
+                    val email = document.getString("email")
+                    val userImg = document.getString("userImg")
+                    val user = User(fullname!!, email!!, userImg!!)
+                    user.uid = uid!!
+                    users.add(user)
+                }
+                handler.onSuccess(users)
+            } else {
+                handler.onError(it.exception!!)
+            }
+        }
+    }
+
+    fun loadFollowers(uid:String,handler: DBUsersHandler) {
+        database.collection(USER_PATH).document(uid).collection(FOLLOWERS_PATH).get().addOnCompleteListener {
+            val users = ArrayList<User>()
+            if (it.isSuccessful) {
+                for (document in it.result!!) {
+                    val uid = document.getString("uid")
+                    val fullname = document.getString("fullname")
+                    val email = document.getString("email")
+                    val userImg = document.getString("userImg")
+                    val user = User(fullname!!, email!!, userImg!!)
+                    user.uid = uid!!
+                    users.add(user)
+                }
+                handler.onSuccess(users)
+            } else {
+                handler.onError(it.exception!!)
+            }
+        }
+    }
 
     fun storeUser(user: User, handler: DBUserHandler) {
         database.collection(USER_PATH).document(user.uid).set(user).addOnSuccessListener {
@@ -90,7 +200,7 @@ object DatabaseManager {
         }
     }
 
-    fun loadPosts(uid:String, handler: DBPostsHandler) {
+    fun loadPosts(uid: String, handler: DBPostsHandler) {
         val reference = database.collection(USER_PATH).document(uid).collection(POST_PATH)
         reference.get().addOnCompleteListener {
             val posts = ArrayList<Post>()
@@ -117,8 +227,8 @@ object DatabaseManager {
         }
     }
 
-    fun loadFeeds(uid:String, handler: DBPostsHandler) {
-        val reference = database.collection(USER_PATH).document(uid).collection(FEED_PATH).orderBy("currentDate")
+    fun loadFeeds(uid: String, handler: DBPostsHandler) {
+        val reference = database.collection(USER_PATH).document(uid).collection(FEED_PATH)
         reference.get().addOnCompleteListener {
             val posts = ArrayList<Post>()
             if (it.isSuccessful) {

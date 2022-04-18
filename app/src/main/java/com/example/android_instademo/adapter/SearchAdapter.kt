@@ -3,14 +3,11 @@ package com.example.android_instademo.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.android_instademo.R
-import com.example.android_instademo.fragment.HomeFragment
 import com.example.android_instademo.fragment.SearchFragment
-import com.example.android_instademo.model.Post
 import com.example.android_instademo.model.User
 import com.google.android.material.imageview.ShapeableImageView
 
@@ -35,6 +32,22 @@ class SearchAdapter(var fragment: SearchFragment, var items: ArrayList<User>): B
                 .placeholder(R.drawable.ic_person)
                 .error(R.drawable.ic_person)
                 .into(holder.iv_profile)
+
+            var tv_follow = holder.tv_follow
+            tv_follow.setOnClickListener {
+                if(!user.isFollowed){
+                    tv_follow.text = fragment.getString(R.string.str_following)
+                }else{
+                    tv_follow.text = fragment.getString(R.string.str_follow)
+                }
+                fragment.followOrUnfollow(user)
+            }
+
+            if(!user.isFollowed){
+                tv_follow.text = fragment.getString(R.string.str_follow)
+            }else{
+                tv_follow.text = fragment.getString(R.string.str_following)
+            }
         }
     }
 
@@ -51,6 +64,5 @@ class SearchAdapter(var fragment: SearchFragment, var items: ArrayList<User>): B
             tv_follow = view.findViewById(R.id.tv_follow)
         }
     }
-
 }
 

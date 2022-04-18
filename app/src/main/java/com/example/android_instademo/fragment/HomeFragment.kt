@@ -2,6 +2,7 @@ package com.example.android_instademo.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,11 +21,22 @@ class HomeFragment : BaseFragment() {
     val TAG = HomeFragment::class.java.simpleName
     lateinit var recyclerView: RecyclerView
     private var listener: HomeListener? = null
+    var feeds = ArrayList<Post>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         initViews(view)
         return view
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        if (isVisibleToUser && feeds.size > 0) {
+            loadMyFeeds()
+        }
     }
 
     /**
@@ -55,7 +67,6 @@ class HomeFragment : BaseFragment() {
         iv_camera.setOnClickListener {
             listener!!.scrollToUpload()
         }
-
         loadMyFeeds()
     }
 
@@ -64,13 +75,15 @@ class HomeFragment : BaseFragment() {
         recyclerView.adapter = adapter
     }
 
-    private fun loadMyFeeds(){
+    private fun loadMyFeeds() {
         showLoading(requireActivity())
         val uid = AuthManager.currentUser()!!.uid
-        DatabaseManager.loadFeeds(uid, object: DBPostsHandler {
+        DatabaseManager.loadFeeds(uid, object : DBPostsHandler {
             override fun onSuccess(posts: ArrayList<Post>) {
                 dismissLoading()
-                refreshAdapter(posts)
+                feeds.clear()
+                feeds.addAll(posts)
+                refreshAdapter(feeds)
             }
 
             override fun onError(e: Exception) {

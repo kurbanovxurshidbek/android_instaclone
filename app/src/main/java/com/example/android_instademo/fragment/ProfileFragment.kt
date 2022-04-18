@@ -18,6 +18,7 @@ import com.example.android_instademo.R
 import com.example.android_instademo.adapter.ProfileAdapter
 import com.example.android_instademo.manager.handler.DBPostsHandler
 import com.example.android_instademo.manager.handler.DBUserHandler
+import com.example.android_instademo.manager.handler.DBUsersHandler
 import com.example.android_instademo.manager.handler.StorageHandler
 import com.example.android_instademo.model.Post
 import com.example.android_instademo.model.User
@@ -32,6 +33,8 @@ class ProfileFragment : BaseFragment() {
     lateinit var tv_fullname: TextView
     lateinit var tv_email: TextView
     lateinit var tv_posts: TextView
+    lateinit var tv_followers: TextView
+    lateinit var tv_following: TextView
     lateinit var iv_profile: ShapeableImageView
 
     var pickedPhoto: Uri? = null
@@ -53,6 +56,8 @@ class ProfileFragment : BaseFragment() {
         tv_fullname = view.findViewById(R.id.tv_fullname)
         tv_email = view.findViewById(R.id.tv_email)
         tv_posts = view.findViewById(R.id.tv_posts)
+        tv_followers = view.findViewById(R.id.tv_followers)
+        tv_following = view.findViewById(R.id.tv_following)
         iv_profile = view.findViewById(R.id.iv_profile)
 
         val iv_logout = view.findViewById<ImageView>(R.id.iv_logout)
@@ -66,6 +71,34 @@ class ProfileFragment : BaseFragment() {
 
         loadUserInfo()
         loadMyPosts()
+        loadMyFollowing()
+        loadMyFollowers()
+    }
+
+    private fun loadMyFollowing(){
+        val uid = AuthManager.currentUser()!!.uid
+        DatabaseManager.loadFollowing(uid, object : DBUsersHandler{
+            override fun onSuccess(users: ArrayList<User>) {
+                tv_following.text = users.size.toString()
+            }
+
+            override fun onError(e: Exception) {
+
+            }
+        })
+    }
+
+    private fun loadMyFollowers(){
+        val uid = AuthManager.currentUser()!!.uid
+        DatabaseManager.loadFollowers(uid, object : DBUsersHandler{
+            override fun onSuccess(users: ArrayList<User>) {
+                tv_followers.text = users.size.toString()
+            }
+
+            override fun onError(e: Exception) {
+
+            }
+        })
     }
 
     private fun loadMyPosts(){
