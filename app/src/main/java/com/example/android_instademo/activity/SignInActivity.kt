@@ -8,7 +8,9 @@ import android.widget.TextView
 import com.example.android_instademo.manager.handler.AuthHandler
 import com.example.android_firebase_demo.managers.AuthManager
 import com.example.android_instademo.R
+import com.example.android_instademo.manager.PrefsManager
 import com.example.android_instademo.utils.Extensions.toast
+import com.example.android_instademo.utils.Logger
 import java.lang.Exception
 
 /**

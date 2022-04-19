@@ -7,6 +7,10 @@ class User {
     var password: String = ""
     var userImg: String = ""
 
+    var device_id = ""
+    var device_type = "A"
+    var device_token = ""
+
     var isFollowed: Boolean = false
 
     constructor(fullname: String, email: String) {

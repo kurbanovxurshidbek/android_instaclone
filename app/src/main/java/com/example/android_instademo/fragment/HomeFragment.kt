@@ -2,7 +2,6 @@ package com.example.android_instademo.fragment
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,11 @@ import com.example.android_firebase_demo.managers.AuthManager
 import com.example.android_firebase_demo.managers.DatabaseManager
 import com.example.android_instademo.R
 import com.example.android_instademo.adapter.HomeAdapter
+import com.example.android_instademo.manager.handler.DBPostHandler
 import com.example.android_instademo.manager.handler.DBPostsHandler
 import com.example.android_instademo.model.Post
+import com.example.android_instademo.utils.DialogListener
+import com.example.android_instademo.utils.Utils
 import java.lang.Exception
 
 class HomeFragment : BaseFragment() {
@@ -88,6 +90,33 @@ class HomeFragment : BaseFragment() {
 
             override fun onError(e: Exception) {
                 dismissLoading()
+            }
+        })
+    }
+
+    fun likeOrUnlikePost(post: Post) {
+        val uid = AuthManager.currentUser()!!.uid
+        DatabaseManager.likeFeedPost(uid, post)
+    }
+
+    fun showDeleteDialog(post: Post){
+        Utils.dialogDouble(requireContext(), getString(R.string.str_delete_post), object : DialogListener{
+            override fun onCallback(isChosen: Boolean) {
+                if(isChosen){
+                    deletePost(post)
+                }
+            }
+        })
+    }
+
+    fun deletePost(post: Post) {
+        DatabaseManager.deletePost(post, object : DBPostHandler {
+            override fun onSuccess(post: Post) {
+                loadMyFeeds()
+            }
+
+            override fun onError(e: Exception) {
+
             }
         })
     }

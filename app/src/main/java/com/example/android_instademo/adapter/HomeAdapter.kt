@@ -1,5 +1,6 @@
 package com.example.android_instademo.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.android_firebase_demo.managers.AuthManager
 import com.example.android_instademo.R
 import com.example.android_instademo.fragment.HomeFragment
 import com.example.android_instademo.model.Post
@@ -31,16 +33,42 @@ class HomeAdapter(var fragment: HomeFragment, var items: ArrayList<Post>): BaseA
             val iv_profile = holder.iv_profile
             val tv_caption = holder.tv_caption
             val tv_time = holder.tv_time
+            val iv_more = holder.iv_more
+            val iv_like = holder.iv_like
 
             tv_fullname.text = post.fullname
             tv_caption.text = post.caption
             tv_time.text = post.currentDate
-            Glide.with(fragment)
-                .load(post.userImg)
-                .placeholder(R.drawable.ic_person)
-                .error(R.drawable.ic_person)
-                .into(iv_profile)
+            Glide.with(fragment).load(post.userImg).placeholder(R.drawable.ic_person)
+                .error(R.drawable.ic_person).into(iv_profile)
             Glide.with(fragment).load(post.postImg).into(iv_post)
+
+            iv_like.setOnClickListener {
+                if(post.isLiked){
+                    post.isLiked = false
+                    iv_like.setImageResource(R.mipmap.ic_favorite)
+                }else{
+                    post.isLiked = true
+                    iv_like.setImageResource(R.mipmap.ic_liked)
+                }
+                fragment.likeOrUnlikePost(post)
+            }
+
+            if(post.isLiked){
+                iv_like.setImageResource(R.mipmap.ic_liked)
+            }else{
+                iv_like.setImageResource(R.mipmap.ic_favorite)
+            }
+
+            val uid = AuthManager.currentUser()!!.uid
+            if(uid == post.uid){
+                iv_more.visibility = View.VISIBLE
+            }else{
+                iv_more.visibility = View.GONE
+            }
+            iv_more.setOnClickListener {
+                fragment.showDeleteDialog(post)
+            }
         }
     }
 

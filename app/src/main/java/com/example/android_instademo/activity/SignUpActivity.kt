@@ -1,6 +1,7 @@
 package com.example.android_instademo.activity
 
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -9,8 +10,11 @@ import com.example.android_firebase_demo.managers.AuthManager
 import com.example.android_instademo.manager.handler.DBUserHandler
 import com.example.android_firebase_demo.managers.DatabaseManager
 import com.example.android_instademo.R
+import com.example.android_instademo.manager.PrefsManager
 import com.example.android_instademo.model.User
 import com.example.android_instademo.utils.Extensions.toast
+import com.example.android_instademo.utils.Logger
+import com.example.android_instademo.utils.Utils
 import java.lang.Exception
 
 /**
@@ -66,6 +70,9 @@ class SignUpActivity : BaseActivity() {
     }
 
     private fun storeUserToDB(user: User){
+        user.device_token = PrefsManager(this).loadDeviceToken()!!
+        user.device_id = Utils.getDeviceID(this)
+
         DatabaseManager.storeUser(user, object: DBUserHandler {
 
             override fun onSuccess(user: User?) {

@@ -1,6 +1,7 @@
 package com.example.android_instademo.utils
 
 import android.util.Log
+import java.lang.Exception
 
 object Logger {
     val IS_TESTER = true
