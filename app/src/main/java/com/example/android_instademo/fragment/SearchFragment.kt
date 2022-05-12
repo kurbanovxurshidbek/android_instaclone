@@ -81,15 +81,12 @@ class SearchFragment : BaseFragment() {
                         items.addAll(mergedUsers(uid,users, following))
                         refreshAdapter(items)
                     }
-
                     override fun onError(e: Exception) {
-
                     }
                 })
             }
 
             override fun onError(e: Exception) {
-
             }
         })
     }

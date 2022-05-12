@@ -172,9 +172,9 @@ object DatabaseManager {
                     var device_id = document.getString("device_id")
                     var device_type = document.getString("device_type")
                     var device_token = document.getString("device_token")
-                    if(device_id == null) device_id = ""
-                    if(device_type == null) device_type = ""
-                    if(device_token == null) device_token = ""
+                    if (device_id == null) device_id = ""
+                    if (device_type == null) device_type = ""
+                    if (device_token == null) device_token = ""
 
                     val user = User(fullname!!, email!!, userImg!!)
                     user.uid = uid!!

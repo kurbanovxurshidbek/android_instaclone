@@ -12,9 +12,9 @@ object StorageManager {
     private val storage = FirebaseStorage.getInstance()
     private var storageRef = storage.getReference()
 
-    fun uploadUserPhoto(uri: Uri, handler: StorageHandler) {
-        val filename = AuthManager.currentUser()!!.uid + ".png"
-        val uploadTask: UploadTask = storageRef.child(USER_PHOTO_PATH).child(filename).putFile(uri)
+    fun uploadPostPhoto(uri: Uri, handler: StorageHandler) {
+        val filename = AuthManager.currentUser()!!.uid + "_" + System.currentTimeMillis().toString() + ".png"
+        val uploadTask: UploadTask = storageRef.child(POST_PHOTO_PATH).child(filename).putFile(uri)
         uploadTask.addOnSuccessListener {
             val result = it.metadata!!.reference!!.downloadUrl;
             result.addOnSuccessListener {
@@ -28,9 +28,9 @@ object StorageManager {
         }
     }
 
-    fun uploadPostPhoto(uri: Uri, handler: StorageHandler) {
-        val filename = AuthManager.currentUser()!!.uid + "_" + System.currentTimeMillis().toString() + ".png"
-        val uploadTask: UploadTask = storageRef.child(POST_PHOTO_PATH).child(filename).putFile(uri)
+    fun uploadUserPhoto(uri: Uri, handler: StorageHandler) {
+        val filename = AuthManager.currentUser()!!.uid + ".png"
+        val uploadTask: UploadTask = storageRef.child(USER_PHOTO_PATH).child(filename).putFile(uri)
         uploadTask.addOnSuccessListener {
             val result = it.metadata!!.reference!!.downloadUrl;
             result.addOnSuccessListener {
