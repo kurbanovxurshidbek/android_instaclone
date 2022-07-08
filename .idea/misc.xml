@@ -15,6 +15,7 @@
         <entry key="app/src/main/res/drawable/view_rounded_corner.xml" value="0.1725" />
         <entry key="app/src/main/res/font/custom_font.xml" value="0.26614583333333336" />
         <entry key="app/src/main/res/font/font.xml" value="0.1425925925925926" />
+        <entry key="app/src/main/res/layout/activity_dynamic.xml" value="0.1480978260869565" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_signin.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_signup.xml" value="0.335" />

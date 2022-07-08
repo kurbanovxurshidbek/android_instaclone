@@ -23,10 +23,21 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.MainActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".activity.SignInActivity" />
+        <activity
+            android:name=".activity.SignInActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data
+                    android:host="instdemo.page.link"
+                    android:scheme="https"/>
+            </intent-filter>
+        </activity>
+
         <activity android:name=".activity.SignUpActivity" />
+        <activity android:name=".activity.MainActivity" />
 
         <service
             android:name=".service.FCMService"

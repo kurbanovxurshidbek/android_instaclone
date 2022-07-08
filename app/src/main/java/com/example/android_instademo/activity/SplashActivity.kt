@@ -1,13 +1,21 @@
 package com.example.android_instademo.activity
 
+import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.WindowManager
+import android.widget.TextView
 import com.example.android_firebase_demo.managers.AuthManager
 import com.example.android_instademo.R
 import com.example.android_instademo.manager.PrefsManager
+import com.example.android_instademo.utils.DeepLink
 import com.example.android_instademo.utils.Logger
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
+import com.google.firebase.dynamiclinks.ktx.*
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 
 /**
@@ -29,6 +37,8 @@ class SplashActivity : BaseActivity() {
     private fun initViews() {
         countDownTimer()
         loadFCMToken()
+        //DeepLink.createLongLink("100234")
+        //DeepLink.createShortLink("200023")
     }
 
     private fun countDownTimer() {

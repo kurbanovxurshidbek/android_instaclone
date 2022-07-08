@@ -77,7 +77,6 @@
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/bg_image"
                     android:visibility="visible" />
 
                 <LinearLayout

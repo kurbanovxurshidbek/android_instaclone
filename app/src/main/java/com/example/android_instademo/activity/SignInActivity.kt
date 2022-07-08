@@ -9,6 +9,7 @@ import com.example.android_instademo.manager.handler.AuthHandler
 import com.example.android_firebase_demo.managers.AuthManager
 import com.example.android_instademo.R
 import com.example.android_instademo.manager.PrefsManager
+import com.example.android_instademo.utils.DeepLink
 import com.example.android_instademo.utils.Extensions.toast
 import com.example.android_instademo.utils.Logger
 import java.lang.Exception
@@ -40,6 +41,9 @@ class SignInActivity : BaseActivity() {
         }
         val tv_signup = findViewById<TextView>(R.id.tv_signup)
         tv_signup.setOnClickListener { callSignUpActivity() }
+
+        val tv_link = findViewById<TextView>(R.id.tv_link)
+        DeepLink.retrieveLink(intent,tv_link)
     }
 
     private fun firebaseSignIn(email: String, password: String) {
