@@ -60,7 +60,8 @@ object DeepLink {
                 if (deepLink != null){
                     val uri = Uri.parse(it.link.toString())
                     tv_insta.text = uri.toString()
-                    val productID = uri.getQueryParameter("partnerId") // productID will be 61 as from the URL
+                    val productID = uri.getQueryParameter("partnerId")
+                    // Store productID locally to use it future
                     tv_insta.text = productID
                 }else{
                     Log.d("DeepLink", "no link")
@@ -72,4 +73,5 @@ object DeepLink {
                 tv_insta.text = "exception"
             }
     }
+
 }

@@ -43,6 +43,7 @@ class SignInActivity : BaseActivity() {
         tv_signup.setOnClickListener { callSignUpActivity() }
 
         val tv_link = findViewById<TextView>(R.id.tv_link)
+
         DeepLink.retrieveLink(intent,tv_link)
     }
 
