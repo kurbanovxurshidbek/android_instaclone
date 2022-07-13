@@ -37,8 +37,8 @@ class SplashActivity : BaseActivity() {
     private fun initViews() {
         countDownTimer()
         loadFCMToken()
-        DeepLink.createLongLink("100234")
-        DeepLink.createShortLink("200023")
+        //DeepLink.createLongLink("100234")
+        //DeepLink.createShortLink("200023")
     }
 
     private fun countDownTimer() {

@@ -6,6 +6,8 @@
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1585" />
         <entry key="app/src/main/res/drawable-v24/shape_circle_orange_light.xml" value="0.2595" />
         <entry key="app/src/main/res/drawable/app_main_gradient.xml" value="0.1725" />
+        <entry key="app/src/main/res/drawable/app_main_gradient1.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/app_main_gradient2.xml" value="0.1495" />
         <entry key="app/src/main/res/drawable/bottom_navigation_color_selector.xml" value="0.142" />
         <entry key="app/src/main/res/drawable/edittext_rounder_corners.xml" value="0.2525" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1585" />
@@ -18,7 +20,7 @@
         <entry key="app/src/main/res/layout/activity_dynamic.xml" value="0.1480978260869565" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_signin.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/activity_signup.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_signup.xml" value="0.21329639889196675" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.2853185595567867" />
         <entry key="app/src/main/res/layout/custom_progress_dialog.xml" value="0.19157608695652173" />
         <entry key="app/src/main/res/layout/fragment_favorite.xml" value="0.25" />
@@ -34,6 +36,7 @@
         <entry key="app/src/main/res/layout/view_dialog_single.xml" value="0.67" />
         <entry key="app/src/main/res/layout/view_dialog_two_way.xml" value="0.335" />
         <entry key="app/src/main/res/menu/navigation.xml" value="0.19907407407407407" />
+        <entry key="app/src/main/res/xml/remote_config_default.xml" value="0.1" />
       </map>
     </option>
   </component>
